@@ -5,6 +5,7 @@ import com.molla.model.User;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -21,4 +22,6 @@ public interface UserService {
     User deleteById(Integer id) throws UserNotFoundException;
 
     void updateEnabledStatus(Integer id, boolean enabled) throws UserNotFoundException;
+
+    User findByEmail(String email) throws UserNotFoundException;
 }

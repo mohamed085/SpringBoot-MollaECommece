@@ -7,8 +7,11 @@
         <!-- Navbar -->
         <div th:replace="admin/fragments :: nav('home')"></div>
 
-        <main>
-            Welcome
+        <main class="container">
+            <h2 class="mb-2 mt-5 main-title">Welcome</h2>
+            <a th:href="@{/admin/account}"
+               sec:authentication="principal.name"></a>
+            <span sec:authentication="principal.authorities"></span>
         </main>
 
 

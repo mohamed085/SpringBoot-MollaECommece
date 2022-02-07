@@ -4,27 +4,29 @@ import com.molla.exciptions.UserNotFoundException;
 import com.molla.model.User;
 import com.molla.repository.UserRepository;
 import com.molla.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
+@Slf4j
 @Service
 public class UserServiceImp implements UserService {
 
     public static final int USERS_PER_PAGE = 4;
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public UserServiceImp(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImp(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -49,12 +51,12 @@ public class UserServiceImp implements UserService {
 
     @Override
     public boolean isEmailUnique(Integer id, String email) {
-        User user = userRepository.findByEmail(email);
+        Optional<User> user = userRepository.findByEmail(email);
 
-        if (user == null) {
+        if (!user.isPresent()) {
             return true;
         } else {
-            if (user.getId() == id) {
+            if (user.get().getId() == id) {
                 return true;
             }
             return false;
@@ -64,16 +66,8 @@ public class UserServiceImp implements UserService {
     @Override
     public User save(User user) {
         boolean isUpdatingUser = (user.getId() != null);
-        if (isUpdatingUser) {
-            User currentUser = userRepository.findById(user.getId()).get();
-            if (user.getPassword().isEmpty()) {
-                user.setPassword(currentUser.getPassword());
-            } else {
-                user.setPassword(passwordEncoder.encode(user.getPassword()));
-            }
-        } else {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
+
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
         return userRepository.save(user);
     }
 
@@ -95,6 +89,12 @@ public class UserServiceImp implements UserService {
         User user = findById(id);
         user.setEnabled(enabled);
         save(user);
+    }
+
+    @Override
+    public User findByEmail(String email) throws UserNotFoundException {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("This user not found"));
     }
 
 

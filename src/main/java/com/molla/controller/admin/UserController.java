@@ -122,13 +122,7 @@ public class UserController {
             FileUpload.cleanDir(uploadDir);
             FileUpload.saveFile(uploadDir, fileName, file);
 
-        } else {
-            if (user.getPhotos().isEmpty())
-                user.setPhotos(null);
-
-            userService.save(user);
         }
-
 
         userService.save(user);
 

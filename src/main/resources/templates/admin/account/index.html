@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:replace="admin/fragments :: page_head('Account Details - Shopme')"></head>
+    <body>
+        <!-- Navbar -->
+        <div th:replace="admin/fragments :: nav('')"></div>
+
+        <!-- Content -->
+        <main class="container">
+            <!-- Main topic -->
+            <h2 class="mb-2 mt-5 main-title">[[${user.fullName}]] Account Details</h2>
+
+            <!-- Redirect message -->
+            <div th:if="${message != null}" class="alert alert-success text-center mt-3 mb-2">
+                [[${message}]]
+            </div>
+
+            <!-- User Form -->
+            <div class="container">
+                <div class="form-container container border mt-5 p-4" style="max-width: 750px">
+                    <form th:action="@{/admin/account}" method="post" enctype="multipart/form-data" th:object="${user}">
+                        <input th:field="*{id}" type="hidden">
+
+                        <div class="row mb-3">
+                            <label class="col-3 col-form-label">Email</label>
+                            <div class="col-9">
+                                <input type="email" class="form-control" th:field="*{email}" readonly>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-3 col-form-label">First name</label>
+                            <div class="col-9">
+                                <input type="text" class="form-control" th:field="*{firstName}" readonly>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-3 col-form-label">Last name</label>
+                            <div class="col-9">
+                                <input type="text" class="form-control" th:field="*{lastName}" readonly>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-3 col-form-label">Assigned Roles</label>
+                            <div class="col-9">
+                                <span><b>[[${user.roles}]]</b></span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-3 col-form-label">Enable</label>
+                            <div class="col-9">
+                                <input type="checkbox" th:field="*{enabled}" class="m-2" readonly>
+                                <br>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-3 col-form-label">Photo</label>
+                            <div class="col-9">
+                                <input type="hidden" th:field="*{photos}">
+                                <img class="mt-2 mb-2" width="300" height="300" id="thumbnail" th:src="@{${user.photoImagePath}}">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </main>
+
+
+
+        <script type="text/javascript" th:src="@{/js/main.js}"></script>
+    </body>
+</html>

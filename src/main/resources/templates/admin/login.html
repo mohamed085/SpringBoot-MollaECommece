@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:insert="admin/fragments :: page_head('Login - Molla Admin')" />
+    <head>
+        <style>
+            .bd-placeholder-img {
+                font-size: 1.125rem;
+                text-anchor: middle;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                user-select: none;
+            }
+
+            @media (min-width: 768px) {
+                .bd-placeholder-img-lg {
+                    font-size: 3.5rem;
+                }
+            }
+        </style>
+        <link rel="stylesheet" th:href="@{/css/login-style.css}">
+    </head>
+        <body class="text-center">
+
+        <main class="form-signin">
+
+            <form th:action="@{/login}" method="post">
+                <h1 class="h3 mb-3 fw-normal">
+                    <img th:src="@{/images/logo-2.png}" class="mt-auto mb-auto">
+                    Please sign in
+                </h1>
+                <div class="error" th:if="${param.error}">
+                    <p class="text-danger p-0 m-0">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+                </div>
+
+                <div class="error" th:if="${param.logout}">
+                    <p class="text-danger p-0 m-0">You have been logged out</p>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="email" name="email" class="form-control input" id="floatingInput" placeholder="name@example.com">
+                    <label for="floatingInput">Email address</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" name="password" class="form-control input" id="floatingPassword" placeholder="Password">
+                    <label for="floatingPassword">Password</label>
+                </div>
+
+                <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" name="remember-me"> Remember me
+                    </label>
+                </div>
+                <input class="w-100 btn btn-lg btn-primary" type="submit" value="Sign in">
+                <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
+            </form>
+        </main>
+
+
+
+    </body>
+</html>

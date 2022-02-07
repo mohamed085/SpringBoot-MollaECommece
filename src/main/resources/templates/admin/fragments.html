@@ -66,6 +66,22 @@
                         <li class="nav-item"><a class="nav-link" th:href="@{/admin/articles}">Articles</a></li>
                         <li class="nav-item"><a class="nav-link" th:href="@{/admin/menus}">Menus</a></li>
                         <li class="nav-item"><a class="nav-link" th:href="@{/admin/settings}">Settings</a></li>
+                        <li class="nav-item profile ms-auto d-flex align-items-center me-2 text-white">
+                            <span class="user-icon fas fa-user mt-2"></span>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link user-dropdown dropdown-toggle" href=""
+                               id="navbarDarkDropdownMenuLink" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false"
+                               sec:authentication="principal.name"></a>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark bg-black dropdown-menu-lg-end" aria-labelledby="navbarDarkDropdownMenuLink">
+                                <li><a class="dropdown-item" th:href="@{/admin/account}">Account</a></li>
+                                <li><a class="dropdown-item" th:href="@{/admin/account/edit}">Update account details</a></li>
+                                <li><a class="dropdown-item" th:href="@{/admin/account/password}">Change password</a></li>
+                                <li><a class="dropdown-item" id="logoutLink">Logout</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </div>
