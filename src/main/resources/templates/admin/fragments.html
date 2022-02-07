@@ -39,25 +39,29 @@
                                th:href="@{/admin}"
                             >Home</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item"
+                            sec:authorize="hasAuthority('Admin')">
                             <a th:class="${activeTab == 'users' ? 'active nav-link'  : 'nav-link'}"
                                th:href="@{/admin/users}"
                             >Users</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item"
+                            sec:authorize="hasAnyAuthority('Admin', 'Editor')">
                             <a th:class="${activeTab == 'categories' ? 'active nav-link'  : 'nav-link'}"
                                th:href="@{/admin/categories}"
                             >categories</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item"
+                            sec:authorize="hasAnyAuthority('Admin', 'Editor')">
                             <a th:class="${activeTab == 'brands' ? 'active nav-link'  : 'nav-link'}"
                                th:href="@{/admin/brands}">
                                 Brands</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item"
+                            sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Shipper', 'Salesperson')">
                             <a th:class="${activeTab == 'products' ? 'active nav-link'  : 'nav-link'}"
                                th:href="@{/admin/products}">
-                            Products</a>
+                                Products</a>
                         </li>
                         <li class="nav-item"><a class="nav-link" th:href="@{/admin/customers}">Customers</a></li>
                         <li class="nav-item"><a class="nav-link" th:href="@{/admin/shipping}">Shipping</a></li>

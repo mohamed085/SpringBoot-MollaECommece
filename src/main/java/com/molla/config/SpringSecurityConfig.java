@@ -44,12 +44,16 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 //        http.authorizeRequests().anyRequest().permitAll();
 
         http.authorizeRequests()
+                .antMatchers("/admin/users/**").hasAuthority("Admin")
+                .antMatchers("/admin/categories/**", "/admin/brands/**").hasAnyAuthority("Admin", "Editor")
+                .antMatchers("/admin/products/**").hasAnyAuthority("Admin", "Editor", "Shipper", "Salesperson")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").usernameParameter("email").permitAll()
                 .and()
                 .logout().permitAll()
-                .and().rememberMe().key("Asdlkklmububvhasdsdhuytghbnmnkjkiuy_16591963").tokenValiditySeconds(7*24*60*60);
+                .and()
+                .rememberMe().key("AbcDefgKLDSLmvop_0123456789").tokenValiditySeconds(7 * 24 * 60 * 60);
     }
 
 

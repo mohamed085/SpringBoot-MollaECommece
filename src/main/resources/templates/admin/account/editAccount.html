@@ -2,10 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
-    <head th:replace="fragments :: page_head('Users - Shopme Admin')"></head>
+    <head th:replace="admin/fragments :: page_head('Users - Shopme Admin')"></head>
     <body>
         <!-- Navbar -->
-        <div th:replace="fragments :: nav('')"></div>
+        <div th:replace="admin/fragments :: nav('')"></div>
 
         <!-- Content -->
         <main class="container">
@@ -20,7 +20,7 @@
             <!-- User Form -->
             <div class="container mt-5">
                 <div class="form-container container border mt-5 p-4" style="max-width: 750px">
-                    <form th:action="@{/account/edit}" method="post"
+                    <form th:action="@{/admin/account/edit}" method="post"
                           onsubmit="return checkEmailUnique(this);"
                           enctype="multipart/form-data" th:object="${user}">
                         <input th:field="*{id}" type="hidden">
