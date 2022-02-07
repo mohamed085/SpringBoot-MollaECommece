@@ -25,11 +25,6 @@ public class Role {
     @Column(length = 150, nullable = false)
     private String description;
 
-    @Override
-    public String toString() {
-        return this.name;
-    }
-
     public Role(Integer id) {
         this.id = id;
     }
@@ -42,4 +37,10 @@ public class Role {
         this.name = name;
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
+
 }

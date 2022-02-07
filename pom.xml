@@ -11,8 +11,8 @@
     <groupId>com</groupId>
     <artifactId>molla</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Mollad e-Commercer</name>
-    <description>Mollad e-Commercer project for Spring Boot</description>
+    <name>Molla e-Commerce</name>
+    <description>Molla e-Commerce project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
     </properties>

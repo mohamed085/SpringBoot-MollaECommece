@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:replace="admin/fragments :: page_head('Molla Admin - Mange users')"></head>
+    <body>
+
+        <!-- Navbar -->
+        <div th:replace="admin/fragments :: nav('users')"></div>
+
+        <main class="container">
+
+            <!-- Main topic -->
+            <h2 class="mb-2 mt-5 main-title">Manage Users | Add new user</h2>
+
+            <!-- User form -->
+            <div class="container">
+                <div class="form-container container border mt-5 p-4" style="max-width: 750px; margin: 0 auto">
+                    <form th:action="@{/admin/users/save}" method="post"
+                          onsubmit="return checkEmailUnique(this);"
+                          enctype="multipart/form-data" th:object="${user}">
+                        <input th:field="*{id}" type="hidden">
+
+                        <div class="row mb-3">
+                            <label class="col-2 col-form-label">Email</label>
+                            <div class="col-10">
+                                <input type="email" class="form-control input" th:field="*{email}" required minlength="8" maxlength="128">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-2 col-form-label">First name</label>
+                            <div class="col-10">
+                                <input type="text" class="form-control input" th:field="*{firstName}" required minlength="2" maxlength="45">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-2 col-form-label">Last name</label>
+                            <div class="col-10">
+                                <input type="text" class="form-control input" th:field="*{lastName}" required minlength="2" maxlength="45">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-2 col-form-label">Password</label>
+                            <div class="col-10">
+                                <input th:if="${user.id == null}" type="password" class="form-control input" th:field="*{password}" required minlength="8" maxlength="20">
+                                <input th:if="${user.id != null}" type="password" class="form-control input" th:field="*{password}" minlength="8" maxlength="20">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-2 col-form-label">Roles</label>
+                            <div class="col-10">
+                                <th:block th:each="role : ${roles}">
+                                    <input
+                                            type="checkbox"
+                                            th:field="*{roles}"
+                                            th:text="${role.name}"
+                                            th:value="${role.id}"
+                                            class="m-2 input"
+                                    >
+                                    - <small>[[${role.description}]]</small>
+                                    <br>
+                                </th:block>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-2 col-form-label">Enabled</label>
+                            <div class="col-10">
+                                <input type="checkbox" th:field="*{enabled}" class="m-2 input">
+                                <br>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-2 col-form-label">Photo</label>
+                            <div class="col-10">
+                                <input type="hidden" th:field="*{photos}">
+                                <input type="file" id="fileImage" name="fileImage" accept="image/*" required>
+                                <br>
+                                <div class="mt-2 mb-3">
+                                    <img class="img-fluid" id="thumbnail" th:src="@{${user.photoImagePath}}">
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-2">
+                            <input type="submit" value="Save" class="btn btn-primary">
+                            <input type="reset" value="Cancel" class="btn btn-primary" id="cancelBtn">
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+        </main>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#cancelBtn").on("click", function () {
+                    window.location = "[[@{/admin/users}]]"
+                });
+                $("#fileImage").change(function () {
+                    let fileSize = this.files[0].size;
+                    alert("File size: " + fileSize);
+                    if (fileSize > 1048576) {
+                        this.setCustomValidity("You must choose an image less than 1MB");
+                        this.reportValidity();
+                    } else  {
+                        this.setCustomValidity("");
+                        showImageThumbnail(this)
+                    }
+                });
+            });
+
+            function showImageThumbnail(fileInput) {
+                let file = fileInput.files[0];
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    $("#thumbnail").attr("src", e.target.result);
+                };
+
+                reader.readAsDataURL(file);
+            }
+
+            MAX_FILE_SIZE = 102400; // 100KB
+
+            moduleURL = "[[@{/admin/users}]]";
+
+            function checkEmailUnique(form) {
+                url = "[[@{/admin/users/check_email}]]";
+                userEmail = $("#email").val();
+                userId = $("#id").val();
+                csrfValue = $("input[name='_csrf']").val();
+
+                params = {id: userId, email: userEmail, _csrf: csrfValue};
+
+                $("#modalDialog").modal();
+
+                $.post(url, params, function(response) {
+                    if (response == "OK") {
+                        form.submit();
+                    } else if (response == "Duplicated") {
+                        alert("There is another user having the email " + userEmail);
+                    } else {
+                        alert("Unknown response from server");
+                    }
+                }).fail(function() {
+                    alert("Could not connect to the server");
+                });
+
+                return false;
+            }
+
+        </script>
+
+
+        <script type="text/javascript" th:src="@{/js/main.js}"></script>
+    </body>
+</html>

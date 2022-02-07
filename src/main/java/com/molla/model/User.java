@@ -78,4 +78,22 @@ public class User {
         return false;
     }
 
+    @Transient
+    public String getPhotoImagePath() {
+        if (id == null || photos == null) return "/images/profile-default.png";
+        return "/user-photos/" + this.id + "/" + this.photos;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + getFullName() + '\'' +
+                ", photos='" + photos + '\'' +
+                ", enabled=" + enabled +
+                ", roles=" + roles +
+                '}';
+    }
 }

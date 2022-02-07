@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a {
+    color: #333333;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #cc9966;
+}
+
+.input:focus {
+    border-color: #cc9966;
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.navbar-nav .nav-link {
+    color: #111;
+    margin: auto 0;
+    text-transform: uppercase;
+    font-weight: 300 !important;
+    font-family: 'Poppins';
+    padding-right: .25rem !important;
+    padding-left: .25rem !important;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #cc9966 !important;
+}
+
+.navbar-nav .nav-link.active  {
+    font-weight: 500 !important;
+    color: #cc9966 !important;
+}
+
+main {
+    margin-top: 100px;
+}
+
+.main-title {
+    color: #333;
+    font: normal 400 2rem/1.1 "Poppins",sans-serif;
+    letter-spacing: -.025em;
+    margin-bottom: 0;
+}
+
+.user-links a {
+    font-weight: 300 !important;
+    font-family: 'Poppins';
+    padding-right: .25rem !important;
+    padding-left: .25rem !important;
+}
+
+.btn-primary {
+    background: none;
+    border: 1px solid #cc9966;
+    color: #cc9966;
+}
+
+.btn-primary:hover {
+    background: #cc9966;
+    border: 1px solid #cc9966;
+    color: #fff;
+}
+
+.border-primary {
+    border-color: #cc9966 !important;
+}
+
+.error {
+    background-color: #ffbdbd;
+    border: 1px solid #ff0000;
+    border-radius: 15px;
+    padding: 10px 20px;
+    margin: 5px 0;
+}
+
+.pagination > li > a
+{
+    background-color: white;
+    color: #333333;
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.pagination > li > a:focus,
+.pagination > li > a:hover,
+.pagination > li > span:focus,
+.pagination > li > span:hover
+{
+    color: #cc9966;
+    background-color: #eee;
+    border-color: #ddd;
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.pagination > .active > a
+{
+    color: white;
+    background-color: #cc9966 !Important;
+    border: solid 1px #cc9966 !Important;
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.pagination > .active > a:hover
+{
+    background-color: #cc9966 !Important;
+    border: solid 1px #cc9966;
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.user-dropdown:hover .user-icon {
+    color: #cc9966 !important;
+}
+
+.text-badge {
+    color: #ffffff;
+    background-color: #cc9966;
+    padding: 3px 8px 5px;
+    margin: 2px;
+    font-weight: 400;
+    font-size: 14px;
+    border-radius: 10px;
+}
+
+.nav-tabs .nav-link {
+    color: #111111;
+}
+
+.nav-tabs .nav-link:hover,
+.nav-tabs .nav-link.active {
+    color: #cc9966;
+}
+
+.nav-tabs .nav-link.active {
+    font-weight: 600;
+}

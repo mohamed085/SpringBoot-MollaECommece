@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:fragment="page_head(title)">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+        <title>[[${title}]]</title>
+        <link rel="icon" type="image/png" th:href="@{/images/logo-2.png}">
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+        <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+        <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+        <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    </head>
+    <body>
+
+        <!-- Navbar -->
+        <nav th:fragment="nav(activeTab)" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+
+            <!-- Hidden form to logout -->
+            <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+                <input type="submit">
+            </form>
+
+            <div class="container-fluid">
+                <a class="navbar-brand" th:href="@{/admin}">
+                    <img th:src="@{/images/logo.png}" />
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                    <ul class="navbar-nav w-100">
+                        <li class="nav-item">
+                            <a th:class="${activeTab == 'home' ? 'active nav-link'  : 'nav-link'}"
+                               th:href="@{/admin}"
+                            >Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:class="${activeTab == 'users' ? 'active nav-link'  : 'nav-link'}"
+                               th:href="@{/admin/users}"
+                            >Users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:class="${activeTab == 'categories' ? 'active nav-link'  : 'nav-link'}"
+                               th:href="@{/admin/categories}"
+                            >categories</a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:class="${activeTab == 'brands' ? 'active nav-link'  : 'nav-link'}"
+                               th:href="@{/admin/brands}">
+                                Brands</a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:class="${activeTab == 'products' ? 'active nav-link'  : 'nav-link'}"
+                               th:href="@{/admin/products}">
+                            Products</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/admin/customers}">Customers</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/admin/shipping}">Shipping</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/admin/orders}">Orders</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/adminv/report}">Sales report</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/admin/articles}">Articles</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/admin/menus}">Menus</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/admin/settings}">Settings</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- COLUMN LINK -->
+        <th th:fragment="column_links(fieldName, columnLabel, link)">
+            <a class="text-white"
+               th:href="@{ ${link} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName}  +'&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+                [[${columnLabel}]]
+            </a>
+            <span th:if="${sortField == fieldName}"
+                  th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}" ></span>
+        </th>
+
+        <!-- SEARCH FORM -->
+        <div th:fragment="search_form_and_message()">
+            <form th:action="@{${moduleURL} + '/page/1'}">
+                <div class="row g-3 align-items-center mb-3 mt-3">
+                    <div class="col-auto">
+                        <label class="col-form-label">Filter</label>
+                    </div>
+                    <div class="col-auto d-flex">
+                        <input type="hidden" name="sortDir" th:value="${sortDir}">
+                        <input type="hidden" name="sortField" th:value="${sortField}">
+                        <input type="search" class="form-control me-1 ms-1 input" name="keyword" th:value="${keyword}" required>
+                        <input type="submit" value="Search" class="btn btn-primary me-1 ms-1">
+                        <input type="reset" onclick="clearFilter()" value="Clear" class="btn btn-primary">
+                    </div>
+                </div>
+
+            </form>
+
+            <div th:if="${messageSuccess != null}" class="alert alert-success text-center">
+                [[${messageSuccess}]]
+            </div>
+
+            <div th:if="${messageError != null}" class="alert alert-danger text-center">
+                [[${messageError}]]
+            </div>
+
+        </div>
+
+
+    </body>
+</html>
