@@ -1,0 +1,154 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:replace="admin/fragments :: page_head('Categories - Molla Managmment')"></head>
+
+    <body>
+        <!-- Navbar -->
+        <div th:replace="admin/fragments :: nav('categories')"></div>
+
+        <main class="container">
+
+            <h2 class="mb-4 mt-5 main-title">Manage Users | [[${pageTitle}]]</h2>
+
+            <div th:if="${messageError != null}" class="alert alert-danger text-center">
+                [[${messageError}]]
+            </div>
+
+
+
+            <div class="container">
+                <div class="form-container container border mt-5 p-4" style="max-width: 700px; margin: 0 auto">
+                    <form th:action="@{/admin/categories/save}" method="post"
+                      enctype="multipart/form-data"
+                      onsubmit="return checkUnique(this)"
+                      th:object="${category}">
+                        <input type="hidden" th:field="*{id}" />
+                        <div class="form-group row mb-3">
+                            <label class="col-sm-3 col-form-label">Category Name:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control input" th:field="*{name}" required minlength="3" maxlength="128"  />
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-3">
+                            <label class="col-sm-3 col-form-label">Alias:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control input" th:field="*{alias}" required minlength="3" maxlength="64"  />
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-3">
+                            <label class="col-sm-3 col-form-label">Parent Category:</label>
+                            <div class="col-sm-9">
+                                <select class="form-control input" th:field="*{parent}">
+                                    <option value="0">[No Parent]</option>
+
+                                    <th:block th:each="cat : ${categories}">
+                                        <option th:value="${cat.id}">[[${cat.name}]]</option>
+                                    </th:block>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-3">
+                            <label class="col-sm-3 col-form-label">Enabled:</label>
+                            <div class="col-sm-9 d-flex align-items-center">
+                                <input type="checkbox" th:field="*{enabled}" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-3">
+                            <label class="col-sm-3 col-form-label">Image:</label>
+                            <div class="col-sm-9">
+                                <input type="hidden" th:field="*{image}" />
+                                <input type="file" id="fileImage" name="fileImage" accept="image/png, image/jpeg"
+                                       class="mb-2 input"
+                                       th:required="${category.imagePath == null}"
+                                />
+
+                                <div class="mt-2 mb-3">
+                                    <img id="thumbnail" alt="Image preview" th:src="@{${category.imagePath}}"
+                                         class="img-fluid" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mb-3">
+                            <input type="submit" value="Save" class="btn btn-primary m-3" />
+                            <input type="button" value="Cancel" class="btn btn-primary" id="buttonCancel" />
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+
+        </main>
+
+        <script type="text/javascript" th:src="@{/js/main.js}"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#cancelBtn").on("click", function () {
+                    window.location = "[[@{/admin/categories}]]"
+                });
+                $("#fileImage").change(function () {
+                    let fileSize = this.files[0].size;
+                    alert("File size: " + fileSize);
+                    if (fileSize > 1048576) {
+                        this.setCustomValidity("You must choose an image less than 1MB");
+                        this.reportValidity();
+                    } else  {
+                        this.setCustomValidity("");
+                        showImageThumbnail(this)
+                    }
+                });
+            });
+
+            function showImageThumbnail(fileInput) {
+                let file = fileInput.files[0];
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    $("#thumbnail").attr("src", e.target.result);
+                };
+
+                reader.readAsDataURL(file);
+            }
+
+            MAX_FILE_SIZE = 102400; // 100KB
+
+            moduleURL = "[[@{/categories}]]";
+
+            function checkUnique(form) {
+                catId = $("#id").val();
+                catName = $("#name").val();
+                catAlias = $("#alias").val();
+
+                csrfValue = $("input[name='_csrf']").val();
+
+                url = "[[@{/admin/categories/check_unique}]]";
+
+                params = {id: catId, name: catName, alias: catAlias, _csrf: csrfValue};
+
+                $.post(url, params, function(response) {
+                    if (response == "OK") {
+                        form.submit();
+                    } else if (response == "DuplicateName") {
+                        alert("There is another category having same name " + catName);
+                    } else if (response == "DuplicateAlias") {
+                        alert("There is another category having same alias " + catAlias);
+                    } else {
+                        alert("Unknown response from server");
+                    }
+
+                }).fail(function() {
+                    alert("Could not connect to the server");
+                });
+
+                return false;
+            }
+
+        </script>
+
+    </body>
+</html>

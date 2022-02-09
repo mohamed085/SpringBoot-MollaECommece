@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:replace="admin/fragments :: page_head('Categories - Molla Managmment')"></head>
+    <body>
+        <!-- Navbar -->
+        <div th:replace="admin/fragments :: nav('categories')"></div>
+
+        <main class="container">
+
+            <!-- Main topic -->
+            <h2 class="mb-2 mt-5 main-title">Manage categories</h2>
+
+            <!-- Links -->
+            <div class="user-links">
+                <a th:href="@{/admin/categories/new}">Create new category</a> |
+                <a th:href="@{/admin/categories/export/csv}">Export as CSV</a> |
+                <a th:href="@{/admin/categories/export/excel}">Export as Excel</a> |
+                <a th:href="@{/admin/categories/export/pdf}">Export as PDF</a>
+            </div>
+
+            <div th:replace="admin/fragments :: search_form_and_message" />
+
+            <table class="table table-bordered table-hover mt-3">
+                <thead>
+                    <tr class="bg-black text-white">
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>
+                            <a class="text-white" th:href="@{'/admin/categories?sortDir=' + ${reverseSortDir}}">
+                                Category name
+                                <span th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}" ></span>
+                            </a>
+                        </th>
+                        <th>Category alias</th>
+                        <th>Enabled</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="category : ${categories}">
+                        <th>[[${category.id}]]</th>
+                        <th class="text-center">
+                            <i th:if="${category.image == null}" class="avatar-icon fas fa-portrait fa-3x"></i>
+                            <img width="100" height="80" th:if="${category.image != null}" th:src="@{${category.imagePath}}">
+                        </th>
+                        <th>[[${category.name}]]</th>
+                        <th>[[${category.alias}]]</th>
+                        <th>
+                            <a th:if="${category.enabled == true}" th:href="@{'/admin/categories/' + ${category.id} + '/enabled/false'}" class="enable-icon fas fa-check-circle fa-2x"></a>
+                            <a th:if="${category.enabled == false}" th:href="@{'/admin/categories/' + ${category.id} + '/enabled/true'}" class="disable-icon fas fa-circle fa-2x"></a>
+                        </th>
+                        <th class="text-center d-flex justify-content-around">
+                            <a class="edit-link" th:href="@{'/admin/categories/edit/' + ${category.id}}"><i class="fas fa-edit"></i></a>
+                            <a class="remove-link" th:if="${category.hasChildren == false}" th:href="@{'/admin/categories/delete/' + ${category.id}}"><i class="fas fa-times"></i></a>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <!-- Pagination -->
+            <div class="text-center mt-2 mb-2" th:if="${totalItems > 0}">
+                <span>Showing users # [[${currentPage}]] to [[${totalPages}]] of [[${totalItems}]]</span>
+            </div>
+            <div class="text-center mt-2 mb-2" th:if="${totalItems < 1}">
+                <span>No categories found</span>
+            </div>
+            <div th:if="${totalPages > 1}" class="mt-2 mb-5">
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled' }">
+                            <a class="page-link" th:href="@{'/admin/brands/page/1' + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">First</a>
+                        </li>
+                        <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled' }">
+                            <a class="page-link" th:href="@{'/admin/categories/page/' + ${currentPage - 1} + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">Previous</a>
+                        </li>
+                        <li th:class="${currentPage != i ? 'page-item': 'page-item active' }" th:each="i : ${#numbers.sequence(1, totalPages)}">
+                            <a class="page-link" th:href="@{'/admin/categories/page/' + ${i} + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">[[${i}]]</a>
+                        </li>
+                        <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled' }">
+                            <a class="page-link" th:href="@{'/admin/categories/page/' + ${currentPage + 1} + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">Next</a>
+                        </li>
+                        <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled' }">
+                            <a class="page-link" th:href="@{'/admin/categories/page/' + ${totalPages} + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">Last</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+        </main>
+    </body>
+</html>

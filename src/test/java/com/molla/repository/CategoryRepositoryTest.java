@@ -1,0 +1,69 @@
+package com.molla.repository;
+
+import com.molla.model.Category;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.Rollback;
+
+import java.util.List;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+
+@DataJpaTest(showSql = false)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Rollback(false)
+class CategoryRepositoryTest {
+
+    @Autowired
+    private CategoryRepository repo;
+
+    @Test
+    public void testCreateRootCategory() {
+        Category category = new Category("Electronics");
+        Category savedCategory = repo.save(category);
+
+        System.out.println(savedCategory.toString());
+        assertNotNull(savedCategory);
+    }
+
+    @Test
+    public void testCreateSubCategory() {
+
+        Category parent = new Category(4);
+        Category subCategory = new Category("Memory", parent);
+        Category savedCategory = repo.save(subCategory);
+
+        assertThat(savedCategory.getId()).isGreaterThan(0);
+    }
+
+    @Test
+    public void testCreateMultiSubCategory() {
+
+        Category parent = new Category(5);
+        Category subCategory1 = new Category("Phones", parent);
+        Category subCategory2 = new Category("Cameras", parent);
+
+        repo.saveAll(List.of(subCategory1, subCategory2));
+
+    }
+
+    @Test
+    public void testGetCategory() {
+        Category category = repo.findById(1).get();
+        System.out.println(category.getName());
+
+        Set<Category> children = category.getChildren();
+
+        for (Category subCategory : children) {
+            System.out.println(subCategory.getName());
+        }
+
+        assertThat(children.size()).isGreaterThan(0);
+    }
+
+
+}
