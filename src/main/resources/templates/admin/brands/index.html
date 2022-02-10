@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:replace="admin/fragments :: page_head('Brands - Molla Managmment')"></head>
+    <body>
+        <!-- Navbar -->
+        <div th:replace="admin/fragments :: nav('brands')"></div>
+
+        <main class="container">
+
+            <!-- Main topic -->
+            <h2 class="mb-2 mt-5 main-title">Manage brands</h2>
+
+            <!-- Links -->
+            <div class="user-links">
+                <a th:href="@{/admin/brands/new}">Create new brand</a> |
+                <a th:href="@{/admin/brands/export/csv}">Export as CSV</a> |
+                <a th:href="@{/admin/brands/export/excel}">Export as Excel</a> |
+                <a th:href="@{/admin/brands/export/pdf}">Export as PDF</a>
+            </div>
+
+            <div th:replace="admin/fragments :: search_form_and_message" />
+
+
+            <table class="table table-bordered table-hover mt-3">
+                <thead>
+                <tr class="bg-black text-white">
+                    <th>ID</th>
+                    <th>Logo</th>
+                    <th th:replace="admin/fragments :: column_links('name', 'Brand name', '/admin/brands')"></th>
+                    <th>Categories</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="brand : ${brands}">
+                    <th>[[${brand.id}]]</th>
+                    <th>
+                        <img th:src="@{${brand.logoPath}}" width="150" height="75">
+                    </th>
+                    <th>[[${brand.name}]]</th>
+                    <th>
+                        <div class="d-flex flex-wrap">
+                            <th:block th:each="category : ${brand.categories}">
+                                <span class="text-badge" th:text="${category.name}"></span>
+                            </th:block>
+                        </div>
+                    </th>
+                    <th class="text-center d-flex justify-content-around">
+                        <a class="edit-link" th:href="@{'/admin/brands/edit/' + ${brand.id}}"><i class="fas fa-edit"></i></a>
+                        <a class="remove-link" th:href="@{'/admin/brands/delete/' + ${brand.id}}"><i class="fas fa-times"></i></a>
+                    </th>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            <div class="text-center mt-2 mb-2" th:if="${totalItems > 0}">
+                <span>Showing users # [[${currentPage}]] to [[${totalPages}]] of [[${totalItems}]]</span>
+            </div>
+            <div class="text-center mt-2 mb-2" th:if="${totalItems < 1}">
+                <span>No users found</span>
+            </div>
+            <div th:if="${totalPages > 1}" class="mt-2 mb-5">
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled' }">
+                            <a class="page-link" th:href="@{'/admin/brands/page/1' + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">First</a>
+                        </li>
+                        <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled' }">
+                            <a class="page-link" th:href="@{'/admin/brands/page/' + ${currentPage - 1} + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">Previous</a>
+                        </li>
+                        <li th:class="${currentPage != i ? 'page-item': 'page-item active' }" th:each="i : ${#numbers.sequence(1, totalPages)}">
+                            <a class="page-link" th:href="@{'/admin/brands/page/' + ${i} + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">[[${i}]]</a>
+                        </li>
+                        <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled' }">
+                            <a class="page-link" th:href="@{'/admin/brands/page/' + ${currentPage + 1} + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">Next</a>
+                        </li>
+                        <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled' }">
+                            <a class="page-link" th:href="@{'/admin/brands/page/' + ${totalPages} + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">Last</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+
+        </main>
+    </body>
+</html>

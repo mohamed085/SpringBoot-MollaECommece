@@ -1,0 +1,133 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:replace="admin/fragments :: page_head('Brands - Molla Managmment')"></head>
+
+    <body>
+        <!-- Navbar -->
+        <div th:replace="admin/fragments :: nav('brands')"></div>
+
+        <main class="container">
+
+            <h2 class="mb-4 mt-5 main-title">Manage Brands | [[${pageTitle}]]</h2>
+
+            <div th:if="${messageError != null}" class="alert alert-danger text-center">
+                [[${messageError}]]
+            </div>
+
+            <div class="container">
+                <div class="form-container container border mt-5 p-4" style="max-width: 700px; margin: 0 auto">
+                    <form th:action="@{/admin/brands/save}" method="post"
+                          onsubmit="return checkUnique(this)"
+                          enctype="multipart/form-data"
+                          th:object="${brand}">
+                        <input type="hidden" th:field="*{id}" />
+                        <div class="form-group row mb-3">
+                            <label class="col-sm-3 col-form-label">Brand name:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control input" th:field="*{name}" required minlength="2" maxlength="128"  />
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-3">
+                            <label class="col-sm-3 col-form-label">Image:</label>
+                            <div class="col-sm-9">
+                                <input type="hidden" th:field="*{logo}" />
+                                <input type="file" id="fileImage" name="fileImage" accept="image/png, image/jpeg"
+                                       class="mb-2 input"
+                                       th:required="${brand.logoPath == null}"
+                                />
+
+                                <div class="mt-2 mb-3">
+                                    <img id="thumbnail" alt="Image preview" th:src="@{${brand.logoPath}}"
+                                         class="img-fluid" />
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-3">
+                                <label class="col-sm-3 col-form-label">Select one or more categories: </label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" th:field="*{categories}" multiple required style="resize: vertical; height: 200px;">
+                                        <th:block th:each="category : ${categoriesList}">
+                                            <option th:value="${category.id}" th:text="${category.name}"></option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mb-3">
+                            <input type="submit" value="Save" class="btn btn-primary m-3" />
+                            <input type="button" value="Cancel" class="btn btn-primary" id="buttonCancel" />
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+
+        </main>
+
+        <script type="text/javascript" th:src="@{/js/main.js}"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#cancelBtn").on("click", function () {
+                    window.location = "[[@{/admin/categories}]]"
+                });
+                $("#fileImage").change(function () {
+                    let fileSize = this.files[0].size;
+                    alert("File size: " + fileSize);
+                    if (fileSize > 1048576) {
+                        this.setCustomValidity("You must choose an image less than 1MB");
+                        this.reportValidity();
+                    } else  {
+                        this.setCustomValidity("");
+                        showImageThumbnail(this)
+                    }
+                });
+            });
+
+            function showImageThumbnail(fileInput) {
+                let file = fileInput.files[0];
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    $("#thumbnail").attr("src", e.target.result);
+                };
+
+                reader.readAsDataURL(file);
+            }
+
+            MAX_FILE_SIZE = 102400; // 100KB
+
+            moduleURL = "[[@{/brands}]]";
+
+
+            function checkUnique(form) {
+                catId = $("#id").val();
+                brandName = $("#name").val();
+
+                csrfValue = $("input[name='_csrf']").val();
+
+                url = "[[@{/admin/brands/check_unique}]]";
+
+                params = {id: catId, name: brandName, _csrf: csrfValue};
+
+                $.post(url, params, function(response) {
+                    if (response == "OK") {
+                        form.submit();
+                    } else if (response == "Duplicate") {
+                        alert("There is another brand having same name " + brandName);
+                    } else {
+                        alert("Unknown response from server");
+                    }
+
+                }).fail(function() {
+                    alert("Could not connect to the server");
+                });
+
+                return false;
+            }
+
+        </script>
+
+    </body>
+</html>

@@ -8,20 +8,20 @@ import java.util.List;
 
 public interface CategoryService {
 
-    public List<Category> findAll();
+    List<Category> findAll();
 
-    public List<Category> findAllByPage(CategoryPageInfo categoryPageInfo, int pageNum, String sortDir, String keyword);
+    List<Category> findAllByPage(CategoryPageInfo categoryPageInfo, int pageNum, String sortDir, String keyword);
 
-    public List<Category> findAllUsedInForm();
+    List<Category> findAllUsedInForm();
 
-    public Category save(Category category);
+    Category save(Category category);
 
-    public Category findById(Integer id) throws CategoryNotFoundException;
+    Category findById(Integer id) throws CategoryNotFoundException;
 
-    public String checkUnique(Integer id, String name, String alias);
+    String checkUnique(Integer id, String name, String alias);
 
-    public void updateCategoryEnabledStatus(Integer id, boolean enabled);
+    void updateCategoryEnabledStatus(Integer id, boolean enabled);
 
-    public void delete(Integer id) throws CategoryNotFoundException;
+    void delete(Integer id) throws CategoryNotFoundException;
 
 }
