@@ -7,7 +7,7 @@ import com.molla.exporter.CategoryPdfExporter;
 import com.molla.model.Category;
 import com.molla.service.CategoryService;
 import com.molla.util.CategoryPageInfo;
-import com.molla.util.FileUpload;
+import com.molla.util.FileUploadUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -120,8 +120,8 @@ public class CategoryController {
             log.debug("CategoryController | saveCategory | savedCategory : " + savedCategory.toString());
             log.debug("CategoryController | saveCategory | uploadDir : " + uploadDir);
 
-            FileUpload.cleanDir(uploadDir);
-            FileUpload.saveFile(uploadDir, fileName, multipartFile);
+            FileUploadUtil.cleanDir(uploadDir);
+            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
         } else {
             categoryService.save(category);
         }
@@ -192,7 +192,7 @@ public class CategoryController {
 
             log.debug("CategoryController | deleteCategory | categoryDir : " + categoryDir);
 
-            FileUpload.removeDir(categoryDir);
+            FileUploadUtil.removeDir(categoryDir);
 
             log.debug("CategoryController | deleteCategory | FileUploadUtil.removeDir is over");
 

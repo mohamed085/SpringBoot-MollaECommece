@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:replace="admin/fragments :: page_head('Product - Molla Managmment')"></head>
+    <body>
+        <!-- Navbar -->
+        <div th:replace="admin/fragments :: nav('products')"></div>
+
+        <main class="container">
+
+            <!-- Main topic -->
+            <h2 class="mb-2 mt-5 main-title">Manage products</h2>
+
+            <!-- Links -->
+            <div class="user-links">
+                <a th:href="@{/admin/products/new}">Create new product</a> |
+                <a th:href="@{/admin/products/export/csv}">Export as CSV</a> |
+                <a th:href="@{/admin/products/export/excel}">Export as Excel</a> |
+                <a th:href="@{/admin/products/export/pdf}">Export as PDF</a>
+            </div>
+
+            <form th:action="@{admin/products/page/1}" class="d-flex m-3" id="searchForm">
+                <input type="hidden" name="sortField" th:value="${sortField}" />
+                <input type="hidden" name="sortDir" th:value="${sortDir}" />
+
+                <span class="mt-auto mb-auto me-3 ms-3">Category:</span>
+                <select class="form-control" name="categoryId" id="dropdownCategory">
+                    <option value="0">All Categories</option>
+
+                    <th:block th:each="cat : ${categories}">
+                        <option th:value="${cat.id}" th:selected="(${categoryId} == ${cat.id})">[[${cat.name}]]</option>
+                    </th:block>
+                </select>
+
+                <span class="mt-auto mb-auto me-3 ms-3">Filter:</span>
+                <input type="search" name="keyword" th:value="${keyword}" class="form-control" required/>
+                &nbsp;&nbsp;
+                <button type="submit" class="btn btn-primary">Search</button>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-primary" onclick="clearFilter()">Clear</button>
+            </form>
+
+            <table class="table table-bordered table-hover mt-3">
+                <thead>
+                    <tr class="bg-black text-white">
+                        <th th:replace="admin/fragments :: column_links('id', 'ID', '/admin/products')"></th>
+                        <th>Image</th>
+                        <th th:replace="admin/fragments :: column_links('name', 'Product name', '/admin/products')"></th>
+                        <th th:replace="admin/fragments :: column_links('brand', 'Brand', '/admin/products')"></th>
+                        <th th:replace="admin/fragments :: column_links('category', 'Category', '/admin/products')"></th>
+                        <th>Enabled</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="product : ${products}">
+                        <th>
+                            <a class="edit-link" th:href="@{'/admin/products/detail/' + ${product.id}}">
+                                [[${product.id}]]
+                            </a>
+                        </th>
+                        <th>
+                            <a class="edit-link" th:href="@{'/admin/products/detail/' + ${product.id}}">
+                                <img th:src="@{${product.mainImagePath}}" style="width: 120px" class="img-fluid" />
+                            </a>
+                        </th>
+                        <th>
+                            <a class="edit-link" th:href="@{'/admin/products/detail/' + ${product.id}}">
+                                [[${product.name}]]
+                            </a>
+                        </th>
+                        <th>[[${product.brand.name}]]</th>
+                        <th>[[${product.category.name}]]</th>
+                        <th sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                            <a th:if="${product.enabled == true}" th:href="@{'/admin/products/' + ${product.id} + '/enabled/false'}" class="enable-icon fas fa-check-circle fa-2x"></a>
+                            <a th:if="${product.enabled == false}" th:href="@{'/admin/products/' + ${product.id} + '/enabled/true'}" class="disable-icon fas fa-circle fa-2x"></a>
+                        </th>
+                        <th class="text-center d-flex justify-content-around">
+                            <a class="edit-link" th:href="@{'/admin/products/detail/' + ${product.id}}"><i class="far fa-eye"></i></a>
+                            <a sec:authorize="hasAnyAuthority('Admin', 'Editor', 'Salesperson')"
+                               class="edit-link" th:href="@{'/admin/products/edit/' + ${product.id}}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a sec:authorize="hasAnyAuthority('Admin', 'Editor')"
+                               class="remove-link" th:href="@{'/admin/products/delete/' + ${product.id}}">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </th>
+
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+
+
+        <!-- Pagination -->
+        <div class="text-center mt-2 mb-2" th:if="${totalItems > 0}">
+            <span>Showing users # [[${currentPage}]] to [[${totalPages}]] of [[${totalItems}]]</span>
+        </div>
+        <div class="text-center mt-2 mb-2" th:if="${totalItems < 1}">
+            <span>No products found</span>
+        </div>
+        <div th:if="${totalPages > 1}" class="mt-2 mb-5">
+            <nav>
+                <ul class="pagination justify-content-center">
+                    <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled' }">
+                        <a class="page-link" th:href="@{'/admin/products/page/1' + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">First</a>
+                    </li>
+                    <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled' }">
+                        <a class="page-link" th:href="@{'/admin/products/page/' + ${currentPage - 1} + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">Previous</a>
+                    </li>
+                    <li th:class="${currentPage != i ? 'page-item': 'page-item active' }" th:each="i : ${#numbers.sequence(1, totalPages)}">
+                        <a class="page-link" th:href="@{'/admin/products/page/' + ${i} + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">[[${i}]]</a>
+                    </li>
+                    <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled' }">
+                        <a class="page-link" th:href="@{'/admin/products/page/' + ${currentPage + 1} + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">Next</a>
+                    </li>
+                    <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled' }">
+                        <a class="page-link" th:href="@{'/admin/products/page/' + ${totalPages} + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">Last</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+
+        <script th:src="@{/js/common_list.js}"></script>
+        <script type="text/javascript">
+            moduleURL = "[[@{/products}]]";
+            $(document).ready(function() {
+
+                $("#dropdownCategory").on("change", function() {
+                    $("#searchForm").submit();
+                });
+
+            });
+        </script>
+
+        <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+        <script type="text/javascript" th:src="@{/webjars/popper/js/popper.js}"></script>
+        <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    </body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <div th:fragment="content" th:remove="tag">
+
+        <div class="row mb-3">
+            <label class="col-2 col-form-label">Product name: </label>
+            <div class="col-10">
+                <input type="text" class="form-control input" th:field="*{name}" required minlength="2" maxlength="128">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-2 col-form-label">Product alias: </label>
+            <div class="col-10">
+                <input type="text" class="form-control input" th:field="*{alias}" placeholder="Default is product name (spaces are replaced by dashes)" minlength="2" maxlength="128">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-2 col-form-label">Brand: </label>
+            <div class="col-10">
+                <select class="form-select input" th:field="*{brand}" required>
+                    <option th:value="null">Select brand</option>
+                    <th:block th:each="brand : ${brands}">
+                        <option th:value="${brand.id}" th:text="${brand.name}"></option>
+                    </th:block>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-2 col-form-label">Category: </label>
+            <div class="col-10">
+                <select class="form-select input" th:field="*{category}" required>
+                    <option th:value="null">Select category</option>
+                    <th:block th:each="category : ${categories}">
+                        <option th:value="${category.id}" th:text="${category.name}"></option>
+                    </th:block>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-2 col-form-label">Enabled</label>
+            <div class="col-10">
+                <input type="checkbox" th:field="*{enabled}" class="m-2 input">
+                <br>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-2 col-form-label">In stock</label>
+            <div class="col-10">
+                <input type="checkbox" th:field="*{inStock}" class="m-2 input">
+                <br>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-2 col-form-label">Product cost: </label>
+            <div class="col-10">
+                <input type="number" class="form-control input" th:field="*{cost}" required>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-2 col-form-label">Product price: </label>
+            <div class="col-10">
+                <input type="number" class="form-control input" th:field="*{price}" required>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-2 col-form-label">Product discount: </label>
+            <div class="col-10">
+                <input type="number" class="form-control input" th:field="*{discountPrice}" required>
+            </div>
+        </div>
+
+    </div>
+
+</html>

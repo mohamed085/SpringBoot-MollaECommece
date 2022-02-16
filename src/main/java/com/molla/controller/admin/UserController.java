@@ -9,7 +9,7 @@ import com.molla.model.User;
 import com.molla.service.RoleService;
 import com.molla.service.UserService;
 import com.molla.service.serviceImp.UserServiceImp;
-import com.molla.util.FileUpload;
+import com.molla.util.FileUploadUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
@@ -119,8 +119,8 @@ public class UserController {
 
             String uploadDir = "user-photos/" + savedUser.getId();
 
-            FileUpload.cleanDir(uploadDir);
-            FileUpload.saveFile(uploadDir, fileName, file);
+            FileUploadUtil.cleanDir(uploadDir);
+            FileUploadUtil.saveFile(uploadDir, fileName, file);
 
         }
 

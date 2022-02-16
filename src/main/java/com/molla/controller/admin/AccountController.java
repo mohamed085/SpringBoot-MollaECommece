@@ -6,8 +6,8 @@ import com.molla.model.Role;
 import com.molla.model.User;
 import com.molla.service.RoleService;
 import com.molla.service.UserService;
-import com.molla.util.FileUpload;
-import lombok.extern.slf4j.Slf4j;import org.slf4j.LoggerFactory;
+import com.molla.util.FileUploadUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -106,8 +106,8 @@ public class AccountController {
 
             String uploadDir = "user-photos/" + savedUser.getId();
 
-            FileUpload.cleanDir(uploadDir);
-            FileUpload.saveFile(uploadDir, fileName, file);
+            FileUploadUtil.cleanDir(uploadDir);
+            FileUploadUtil.saveFile(uploadDir, fileName, file);
 
         } else {
             if (user.getPhotos().isEmpty())

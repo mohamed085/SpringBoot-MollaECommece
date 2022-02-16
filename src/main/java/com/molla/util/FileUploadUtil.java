@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 @Slf4j
-public class FileUpload {
+public class FileUploadUtil {
 
     // save file process
     public static void saveFile(String uploadDir, String fileName,

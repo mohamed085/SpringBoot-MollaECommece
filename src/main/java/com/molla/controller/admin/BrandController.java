@@ -9,7 +9,7 @@ import com.molla.model.Category;
 import com.molla.service.BrandService;
 import com.molla.service.CategoryService;
 import com.molla.service.serviceImp.BrandServiceImp;
-import com.molla.util.FileUpload;
+import com.molla.util.FileUploadUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
@@ -122,8 +122,8 @@ public class BrandController {
             log.debug("BrandController | saveBrand | savedBrand : " + savedBrand.toString());
             log.debug("BrandController | saveCategory | uploadDir : " + uploadDir);
 
-            FileUpload.cleanDir(uploadDir);
-            FileUpload.saveFile(uploadDir, fileName, multipartFile);
+            FileUploadUtil.cleanDir(uploadDir);
+            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
         } else {
             brandService.save(brand);
         }
@@ -229,7 +229,7 @@ public class BrandController {
 
             log.debug("BrandController | deleteBrand | brandDir : " + brandDir);
 
-            FileUpload.removeDir(brandDir);
+            FileUploadUtil.removeDir(brandDir);
 
             log.debug("BrandController | deleteBrand | FileUploadUtil.removeDir is over");
 

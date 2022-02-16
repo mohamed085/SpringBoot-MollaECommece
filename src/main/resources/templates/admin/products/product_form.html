@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+    <head th:replace="admin/fragments :: page_head('Products - Molla Managmment')"></head>
+    <head>
+        <link rel="stylesheet" th:href="@{/richtext/richtext.min.css}" />
+        <script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+    </head>
+
+    <body>
+        <!-- Navbar -->
+        <div th:replace="admin/fragments :: nav('products')"></div>
+
+        <main class="container">
+
+            <h2 class="mb-4 mt-5 main-title">Manage Products | [[${pageTitle}]]</h2>
+
+            <div th:if="${messageError != null}" class="alert alert-danger text-center">
+                [[${messageError}]]
+            </div>
+
+            <div class="container">
+                <div class="form-container container border mt-5 p-4">
+                    <form th:action="@{/admin/products/save}" method="post"
+                          onsubmit="return checkUnique(this)"
+                          enctype="multipart/form-data" th:object="${product}">
+                        <input th:field="*{id}" type="hidden">
+                        <input th:if="${product.category != null}" type="hidden"
+                               id="categoryId" th:value="${product.category.id}" />
+
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab">Overview</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab">Description</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#images" type="button" role="tab">Images</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#details" type="button" role="tab">Details</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#shipping" type="button" role="tab">Shipping</button>
+                            </li>
+                        </ul>
+
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="overview" role="tabpanel">
+                                <div class="pt-4 pb-4 pe-3 ps-3">
+                                    <div th:replace="admin/products/product_overview :: content"></div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="description" role="tabpanel">
+                                <div class="pt-4 pb-4 pe-3 ps-3">
+                                    <div th:replace="admin/products/product_description :: content"></div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="images" role="tabpanel">
+                                <div class="pt-4 pb-4 pe-3 ps-3">
+                                    <div th:replace="admin/products/product_images :: content"></div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="details" role="tabpanel">
+                                <div class="pt-4 pb-4 pe-3 ps-3">
+                                    <div th:replace="admin/products/product_details :: content"></div>
+                                    <div>
+                                        <input type="button" class="btn btn-primary m-3" value="Add More Detail"
+                                               onclick="addNextDetailSection()" />
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="shipping" role="tabpanel">
+                                <div class="pt-4 pb-4 pe-3 ps-3">
+                                    <div th:replace="admin/products/product_shipping :: content"></div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="text-center mt-2">
+                            <input type="submit" value="Save" class="btn btn-primary">
+                            <input type="reset" value="Cancel" class="btn btn-primary" id="cancelBtn">
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </main>
+
+
+        <script type="text/javascript">
+
+            MAX_FILE_SIZE = 502400; // 500KB
+
+            moduleURL = "[[@{/admin/products}]]";
+            brandModuleURL = "[[@{/admin/brands}]]";
+            defaultImageThumbnailSrc = "[[@{/images/product.png}]]";
+            checkUniqueUrl = "[[@{/admin/products/check_unique}]]";
+
+        </script>
+
+        <script th:src="@{/js/main.js}"></script>
+        <script th:src="@{/js/common-form.js}"></script>
+        <script th:src="@{/js/product-form-overview.js}"></script>
+        <script th:src="@{/js/product-form-images.js}"></script>
+        <script th:src="@{/js/product-form-details.js}"></script>
+    </body>
+</html>
