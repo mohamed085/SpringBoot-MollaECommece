@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
@@ -24,6 +25,7 @@ class UserRepositoryTest {
     private UserRepository repo;
     private TestEntityManager entityManager;
 
+
     @Autowired
     public UserRepositoryTest(UserRepository repo, TestEntityManager entityManager) {
         this.repo = repo;
@@ -34,17 +36,19 @@ class UserRepositoryTest {
     @Test
     public void testCreateNewUserWithOneRole() {
         Role roleAdmin = entityManager.find(Role.class, 1);
-        User userWithOneRole = new User("mohamed@gmail.com", "mo0420", "Mohamed", "Emad");
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        User userWithOneRole = new User("mohamed@gmail.com", passwordEncoder.encode("MO0420"), "Mohamed", "Emad");
         userWithOneRole.addRole(roleAdmin);
+        userWithOneRole.setEnabled(true);
 
         User savedUser = repo.save(userWithOneRole);
-
         assertThat(savedUser.getId()).isGreaterThan(0);
     }
 
     @Test
     public void testCreateNewUserWithTwoRoles() {
-        User userWithTwoRole = new User("mohamed085@gmail.com", "mo0420", "Mohamed", "Emad");
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        User userWithTwoRole = new User("mohamed085@gmail.com", passwordEncoder.encode("MO0420sara"), "Mohamed", "Emad");
         Role roleEditor = new Role(3);
         Role roleAssistant = new Role(5);
 

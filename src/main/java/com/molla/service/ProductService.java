@@ -23,4 +23,6 @@ public interface ProductService {
     void delete(Integer id) throws ProductNotFoundException;
 
     Product findById(Integer id) throws ProductNotFoundException;
+
+    Page<Product> listByCategory(int pageNum, Integer categoryId);
 }

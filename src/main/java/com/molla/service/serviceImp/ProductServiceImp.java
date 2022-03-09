@@ -18,7 +18,8 @@ import java.util.List;
 @Service
 public class ProductServiceImp implements ProductService {
 
-    public static final int PRODUCTS_PER_PAGE = 5;
+    public static final int PRODUCTS_PER_PAGE = 10;
+    public static final int SEARCH_RESULTS_PER_PAGE = 10;
 
     private final ProductRepository productRepository;
 
@@ -112,5 +113,13 @@ public class ProductServiceImp implements ProductService {
     public Product findById(Integer id) throws ProductNotFoundException {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Could not find any product with ID " + id));
+    }
+
+    @Override
+    public Page<Product> listByCategory(int pageNum, Integer categoryId) {
+        String categoryIdMatch = "-" + String.valueOf(categoryId) + "-";
+        Pageable pageable = PageRequest.of(pageNum - 1, PRODUCTS_PER_PAGE);
+
+        return productRepository.listByCategory(categoryId, categoryIdMatch, pageable);
     }
 }

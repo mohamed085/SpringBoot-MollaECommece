@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:replace="customer/navigation :: page_head('Molla E-Commerce')"></head>
+    <body>
+        <div th:replace="customer/navigation :: nav('home')"></div>
+
+        <main class="container">
+            <div>
+                <h1>Shopping by Categories</h1>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-2" th:each="cat : ${categories}">
+                    <div><img th:src="@{${cat.imagePath}}" width="80" /></div>
+                    <div>
+                        <a th:href="@{'/c/' + ${cat.alias}}">[[${cat.name}]]</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div th:replace="customer/navigation :: footer_menu"></div>
+    </body>
+</html>

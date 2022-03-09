@@ -123,4 +123,21 @@ class CategoryRepositoryTest {
         assertThat(category.getAlias()).isEqualTo(alias);
     }
 
+    @Test
+    public void testListEnabledCategories() {
+        List<Category> categories = repo.findAllEnabled();
+        categories.forEach(category -> {
+            System.out.println(category.getName() + " (" + category.isEnabled() + ")");
+        });
+    }
+
+    @Test
+    public void testFindCategoryByAlias() {
+        String alias = "electronics";
+        Category category = repo.findByAliasEnabled(alias);
+
+        assertThat(category).isNotNull();
+    }
+
+
 }

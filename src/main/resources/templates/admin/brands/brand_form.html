@@ -69,6 +69,8 @@
 
         <script type="text/javascript" th:src="@{/js/main.js}"></script>
         <script type="text/javascript">
+            moduleURL = "[[@{/brands}]]";
+
             $(document).ready(function () {
                 $("#cancelBtn").on("click", function () {
                     window.location = "[[@{/admin/categories}]]"
@@ -84,7 +86,30 @@
                         showImageThumbnail(this)
                     }
                 });
+                let dropdownCategories = $("#categories");
+                let divChosenCategories = $("#chosenCategories");
+
+                dropdownCategories.change(function() {
+                    divChosenCategories.empty();
+                    showChosenCategories();
+                });
+
+                showChosenCategories();
+
             });
+
+            function showChosenCategories() {
+
+                dropdownCategories.children("option:selected").each(function() {
+                    selectedCategory = $(this);
+                    catId = selectedCategory.val();
+                    catName = selectedCategory.text().replace(/-/g, "");
+                    $('#remove-'+catId).remove();
+                    divChosenCategories.append("<span id='remove-"+catId+"' class='badge badge-secondary m-1'>" + catName + "</span>");
+                });
+            }
+
+
 
             function showImageThumbnail(fileInput) {
                 let file = fileInput.files[0];

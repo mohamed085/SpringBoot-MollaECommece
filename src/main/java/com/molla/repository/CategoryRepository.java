@@ -28,4 +28,10 @@ public interface CategoryRepository extends PagingAndSortingRepository<Category,
     @Query("SELECT c FROM Category c WHERE c.name LIKE %?1%")
     Page<Category> search(String keyword, Pageable pageable);
 
+    @Query("SELECT c FROM Category c WHERE c.enabled = true ORDER BY c.name ASC")
+    public List<Category> findAllEnabled();
+
+    @Query("SELECT c FROM Category c WHERE c.enabled = true AND c.alias = ?1")
+    public Category findByAliasEnabled(String alias);
+
 }

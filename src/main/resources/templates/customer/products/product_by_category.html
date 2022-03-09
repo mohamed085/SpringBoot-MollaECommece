@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:replace="customer/navigation :: page_head(${pageTitle})"></head>
+    <body>
+    <div th:replace="customer/navigation :: nav('home')"></div>
+
+        <main class="container">
+            <div>
+                <h1>Products in Category </h1>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div th:replace="customer/breadcrumb :: content"></div>
+                </div>
+            </div>
+
+            <div class="row text-center">
+                <th:block th:each="cat : ${category.children}">
+                    <div class="col" th:if="${cat.enabled == true}">
+                        <a th:href="@{'/c/' + ${cat.alias}}">
+                            <img th:src="@{${cat.imagePath}}" height="100" />
+                            <br/>
+                            <b>[[${cat.name}]]</b>
+                        </a>
+                    </div>
+                </th:block>
+            </div>
+
+
+            <div class="row mt-4">
+                <th:block th:each="product : ${listProducts}">
+                    <div th:replace="customer/products/product_fragment :: content"></div>
+                </th:block>
+            </div>
+
+
+            <div class="text-center mt-2 mb-2" th:if="${totalItems > 0}">
+                <span>Showing users # [[${currentPage}]] to [[${totalPages}]] of [[${totalItems}]]</span>
+            </div>
+            <div class="text-center mt-2 mb-2" th:if="${totalItems < 1}">
+                <span>No products found</span>
+            </div>
+            <div th:if="${totalPages > 1}" class="mt-2 mb-5">
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled' }">
+                            <a class="page-link" th:href="@{'/admin/products/page/1' + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">First</a>
+                        </li>
+                        <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled' }">
+                            <a class="page-link" th:href="@{'/admin/products/page/' + ${currentPage - 1} + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">Previous</a>
+                        </li>
+                        <li th:class="${currentPage != i ? 'page-item': 'page-item active' }" th:each="i : ${#numbers.sequence(1, totalPages)}">
+                            <a class="page-link" th:href="@{'/admin/products/page/' + ${i} + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">[[${i}]]</a>
+                        </li>
+                        <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled' }">
+                            <a class="page-link" th:href="@{'/admin/products/page/' + ${currentPage + 1} + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">Next</a>
+                        </li>
+                        <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled' }">
+                            <a class="page-link" th:href="@{'/admin/products/page/' + ${totalPages} + '/?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword == null ? '' : '&keyword=' + keyword}}">Last</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+        </main>
+
+    <div th:replace="customer/navigation :: footer_menu"></div>
+</body>
+</html>

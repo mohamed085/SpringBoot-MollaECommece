@@ -4,7 +4,9 @@ import com.molla.exciptions.CategoryNotFoundException;
 import com.molla.model.Category;
 import com.molla.util.CategoryPageInfo;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public interface CategoryService {
 
@@ -24,4 +26,9 @@ public interface CategoryService {
 
     void delete(Integer id) throws CategoryNotFoundException;
 
+    List<Category> listNoChildrenCategories();
+
+    Category getEnabledCategoryByAlias(String alias) throws CategoryNotFoundException;
+
+    List<Category> getCategoryParents(Category child);
 }

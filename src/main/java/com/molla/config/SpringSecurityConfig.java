@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -23,7 +24,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -50,13 +51,18 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/products/new", "/admin/products/delete/**").hasAnyAuthority("Admin", "Editor")
                 .antMatchers("/admin/products/edit/**", "/admin/products/save", "/admin/products/check_unique").hasAnyAuthority("Admin", "Editor", "Salesperson")
                 .antMatchers("/admin/products", "/admin/products/", "/admin/products/detail/**", "/admin/products/page/**").hasAnyAuthority("Admin", "Editor", "Salesperson", "Shipper")
-                .antMatchers("/admin/products/**").hasAnyAuthority("Admin", "Editor").anyRequest().authenticated()
+                .antMatchers("/admin/products/**").hasAnyAuthority("Admin", "Editor")
+                .antMatchers("/account_details", "/update_account_details", "/cart" , "/address_book/**").authenticated()
+                .antMatchers("/admin/**").authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .formLogin().loginPage("/login").usernameParameter("email").permitAll()
                 .and()
                 .logout().permitAll()
                 .and()
-                .rememberMe().key("AbcDefgKLDSLmvop_0123456789").tokenValiditySeconds(7 * 24 * 60 * 60);
+                .rememberMe().key("1234567890_aBcDeFgHiJkLmNoPqRsTuVwXyZ").tokenValiditySeconds(14 * 24 * 60 * 60)
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
     }
 
 

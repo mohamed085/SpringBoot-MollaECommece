@@ -14,7 +14,7 @@ public class PasswordEncoderTest {
         String encodedPassword = passwordEncoder.encode(rawPassword);
 
         System.out.println(encodedPassword);
-        System.out.println(passwordEncoder.matches("MO0420sara", "$2a$10$zRa/rmQ8JarpYG2bNKftyelKnsUhsHwGB.xmCKTWJClsB7O9wzTnG"));
+        System.out.println(passwordEncoder.matches("MO0420sara", encodedPassword));
         boolean matches = passwordEncoder.matches(rawPassword, encodedPassword);
 
         assertThat(matches).isTrue();
