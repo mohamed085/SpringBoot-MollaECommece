@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:replace="admin/fragments :: page_head('Settings - Molla Mangment')"></head>
+    <body>
+
+        <!-- Navbar -->
+        <div th:replace="admin/fragments :: nav('settings')"></div>
+
+        <main class="container">
+            <!-- Main topic -->
+            <h2 class="mb-2 mt-5 main-title">Settings</h2>
+
+            <div>
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab">General</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#countries" type="button" role="tab">Countries</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#states" type="button" role="tab">States</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#mailServer" type="button" role="tab">Mail Server</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#mailTemplates" type="button" role="tab">Mail Templates</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab">Payment</button>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="general" role="tabpanel">
+                        <div class="pt-4 pb-4 pe-3 ps-3">
+                            <div th:replace="admin/settings/general :: content" />
+
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="countries" role="tabpanel">
+                        <div class="pt-4 pb-4 pe-3 ps-3">
+                            states
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="states" role="tabpanel">
+                        <div class="pt-4 pb-4 pe-3 ps-3">
+                            states
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="mailServer" role="tabpanel">
+                        <div class="pt-4 pb-4 pe-3 ps-3">
+                            mailServer
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="mailTemplates" role="tabpanel">
+                        <div class="pt-4 pb-4 pe-3 ps-3">
+                            mailTemplates
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="payment" role="tabpanel">
+                        <div class="pt-4 pb-4 pe-3 ps-3">
+                            payment
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </main>
+
+        <script type="text/javascript">
+            MAX_FILE_SIZE = 102400; // 100KB
+            contextPath = "[[@{/}]]";
+            var csrfHeaderName = "[[${_csrf.headerName}]]";
+            var csrfValue = "[[${_csrf.token}]]";
+
+            $(document).ready(function() {
+                $("#customerVerificationContent").richText();
+            });
+
+        </script>
+        <script type="text/javascript" th:src="@{/js/main.js}"></script>
+        <script type="text/javascript" th:src="@{/js/common-form.js}"></script>
+        <script type="text/javascript" th:src="@{/js/countries_setting.js}"></script>
+        <script type="text/javascript" th:src="@{/js/states_setting.js}"></script>
+    </body>
+</html>
