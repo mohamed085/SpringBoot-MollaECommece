@@ -9,6 +9,7 @@
             <div>
                 <h1>Shopping by Categories</h1>
             </div>
+            <div th:replace="customer/search_nav :: search_nav"></div>
 
             <div class="row">
                 <div class="col-sm-2" th:each="cat : ${categories}">

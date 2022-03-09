@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ProductRepository extends PagingAndSortingRepository<Product, Integer> {
 
@@ -46,7 +48,7 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, I
             + " ORDER BY p.name ASC")
     Page<Product> listByCategory(Integer categoryId, String categoryIDMatch, Pageable pageable);
 
-    Product findByAlias(String alias);
+    Optional<Product> findByAlias(String alias);
 
     @Query(value = "SELECT * FROM products WHERE enabled = true AND "
             + "MATCH(name, short_description, full_description) AGAINST (?1)",

@@ -122,4 +122,18 @@ public class ProductServiceImp implements ProductService {
 
         return productRepository.listByCategory(categoryId, categoryIdMatch, pageable);
     }
+
+    @Override
+    public Product getByAlias(String alias) throws ProductNotFoundException {
+        return productRepository.findByAlias(alias)
+                .orElseThrow(() -> new ProductNotFoundException("Could not find any product with alias " + alias));
+    }
+
+    @Override
+    public Page<Product> search(String keyword, int pageNum) {
+        Pageable pageable = PageRequest.of(pageNum - 1, SEARCH_RESULTS_PER_PAGE);
+        return productRepository.search(keyword, pageable);
+    }
+
+
 }

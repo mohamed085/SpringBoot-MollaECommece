@@ -17,6 +17,10 @@
                             </li>
                         </th:block>
 
+                        <li class="breadcrumb-item" th:if="${product != null}">
+                            <span>[[${product.shortName}]]</span>
+                        </li>
+
                     </ol>
                 </nav>
             </div>

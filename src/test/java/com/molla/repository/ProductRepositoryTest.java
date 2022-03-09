@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.Date;
@@ -94,4 +97,20 @@ class ProductRepositoryTest {
         assertThat(!result.isPresent());
     }
 
+    @Test
+    public void testFindByAlias() {
+        String alias = "ASUS-TUF-Dash-F15-FX516PC-HN558T";
+        Product product = repo.findByAlias(alias).get();
+
+        assertThat(product).isNotNull();
+    }
+
+    @Test
+    public void testSearch() {
+        final int SEARCH_RESULTS_PER_PAGE = 10;
+        Pageable pageable = PageRequest.of(0, SEARCH_RESULTS_PER_PAGE);
+        Page<Product> productPage = repo.search("ASUS", pageable);
+
+        System.out.println(productPage.getContent());
+    }
 }
