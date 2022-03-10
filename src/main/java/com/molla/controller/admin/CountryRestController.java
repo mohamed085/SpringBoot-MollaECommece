@@ -47,7 +47,12 @@ public class CountryRestController {
         log.debug("CountryRestController | checkUnique | name : " + name);
 
         Country countryByName = repo.findByName(name);
-        boolean isCreatingNew = (countryByName.getId() != null ? true : false);
+
+        boolean isCreatingNew = true;
+
+        if (countryByName == null) {
+            isCreatingNew = false;
+        }
 
         if (isCreatingNew) {
             if (countryByName != null) return "Duplicate";

@@ -51,7 +51,7 @@ function deleteCountry() {
 	optionValue = dropDownCountry.val();
 	countryId = optionValue.split("-")[0];
 
-	url = contextPath + "countries/delete/" + countryId;
+	url = contextPath + "admin/countries/delete/" + countryId;
 
 	$.ajax({
 		type: 'DELETE',
@@ -72,7 +72,7 @@ function updateCountry() {
 	
 	if (!validateFormCountry()) return;
 	
-	url = contextPath + "countries/save";
+	url = contextPath + "admin/countries/save";
 	countryName = fieldCountryName.val();
 	countryCode = fieldCountryCode.val();
 
@@ -103,7 +103,7 @@ function addCountry() {
 	
 	if (!validateFormCountry()) return;
 	
-	url = contextPath + "countries/save";
+	url = contextPath + "admin/countries/save";
 	countryName = fieldCountryName.val();
 	countryCode = fieldCountryCode.val();
 	jsonData = {name: countryName, code: countryCode};
@@ -169,7 +169,7 @@ function changeFormStateToSelectedCountry() {
 }
 
 function loadCountries() {
-	url = contextPath + "countries/list";
+	url = contextPath + "admin/countries/list";
 	$.get(url, function(responseJSON) {
 		dropDownCountry.empty();
 		
@@ -214,7 +214,7 @@ function checkUnique() {
 	
 	jsonData = {name: countryName, _csrf: csrfValue};
 	
-	checkUniqueUrl = contextPath + "countries/check_unique";
+	checkUniqueUrl = contextPath + "admin/countries/check_unique";
 	
 	$.ajax({
 		type: 'POST',

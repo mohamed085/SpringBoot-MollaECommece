@@ -186,7 +186,7 @@ function loadStates4Country() {
 }
 
 function loadCountries4States() {
-	url = contextPath + "countries/list";
+	url = contextPath + "admin/countries/list";
 	$.get(url, function(responseJSON) {
 		dropDownCountry4States.empty();
 
@@ -200,7 +200,8 @@ function loadCountries4States() {
 	}).fail(function() {
 		showToastMessage("ERROR: Could not connect to server or server encountered an error");
 	});
-} 
+
+}
 
 function validateFormState() {
 	formState = document.getElementById("formState");
