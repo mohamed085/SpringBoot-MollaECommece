@@ -39,6 +39,18 @@ public class SettingServiceImp implements SettingService {
     }
 
     @Override
+    public List<Setting> getListGeneralSettings() {
+        List<Setting> settings = new ArrayList<>();
+
+        List<Setting> generalSettings = settingRepository.findByCategory(SettingCategory.GENERAL);
+        List<Setting> currencySettings = settingRepository.findByCategory(SettingCategory.CURRENCY);
+
+        settings.addAll(generalSettings);
+        settings.addAll(currencySettings);
+        return settings;
+    }
+
+    @Override
     public void saveAll(Iterable<Setting> settings) {
         settingRepository.saveAll(settings);
     }

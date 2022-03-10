@@ -11,6 +11,15 @@
             <!-- Main topic -->
             <h2 class="mb-2 mt-5 main-title">Settings</h2>
 
+            <div th:if="${messageSuccess != null}" class="alert alert-success text-center">
+                [[${messageSuccess}]]
+            </div>
+
+            <div th:if="${messageError != null}" class="alert alert-danger text-center">
+                [[${messageError}]]
+            </div>
+
+
             <div>
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
